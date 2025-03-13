@@ -12,6 +12,11 @@ on:
         default: false
         required: false
 
+# Add permissions for the GITHUB_TOKEN
+permissions:
+  contents: write  # Needed for pushing to the repository
+  packages: write  # Needed for npm publishing if using GitHub Packages
+
 jobs:
   update-types:
     runs-on: ubuntu-latest
@@ -21,6 +26,8 @@ jobs:
         with:
           # Full git history needed for version operations
           fetch-depth: 0
+          # Use a personal access token instead of GITHUB_TOKEN for push
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -52,6 +59,7 @@ jobs:
       - name: Push changes
         # Only push if there are changes to push and not in debug mode
         if: ${{ steps.update.outputs.changes == 'true' && github.event.inputs.debug != 'true' }}
-        run: git push
+        run: |
+          git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
