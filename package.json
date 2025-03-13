@@ -1,7 +1,9 @@
 {
   "name": "@travvy/bun-test",
-  "version": "0.0.2",
-  "module": "test.d.ts",
-  "description": "Bun test",
-  "type": "module"
+  "version": "0.0.3",
+  "description": "re-export of bun:test",
+  "files": [
+    "*.d.ts"
+  ],
+  "types": "./index.d.ts"
 }
