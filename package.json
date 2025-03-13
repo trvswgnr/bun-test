@@ -1,9 +1,7 @@
 {
-  "name": "bun-test",
-  "module": "index.ts",
-  "devDependencies": {
-    "@types/bun": "1.2.5",
-    "typescript": "5.8.2"
-  },
+  "name": "@travvy/bun-test",
+  "version": "0.0.2",
+  "module": "test.d.ts",
+  "description": "Bun test",
   "type": "module"
 }
