@@ -4,10 +4,8 @@
     "": {
       "name": "bun-test",
       "devDependencies": {
-        "@types/bun": "latest",
-      },
-      "peerDependencies": {
-        "typescript": "^5",
+        "@types/bun": "1.2.5",
+        "typescript": "5.8.2",
       },
     },
   },
