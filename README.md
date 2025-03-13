@@ -54,7 +54,7 @@ describe("group", () => {
 
 ## License
 
-MIT
+See Bun's [LICENSE](https://github.com/oven-sh/bun/blob/main/LICENSE.md)
 
 ## Links
 
