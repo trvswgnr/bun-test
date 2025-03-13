@@ -5,6 +5,12 @@ on:
     # Run daily at 2:00 UTC
     - cron: '0 2 * * *'
   workflow_dispatch: # Allow manual triggering
+    inputs:
+      debug:
+        description: 'Run in debug mode (skips git operations and npm publish)'
+        type: boolean
+        default: false
+        required: false
 
 jobs:
   update-types:
@@ -31,21 +37,21 @@ jobs:
         id: update
         run: |
           chmod +x ./fetch-types.sh
-          ./fetch-types.sh
+          DEBUG=${{ github.event.inputs.debug == 'true' && 'true' || 'false' }} ./fetch-types.sh
         env:
           # GitHub token for API requests (avoids rate limiting)
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish to npm
-        # Only run if changes were made
-        if: ${{ steps.update.outputs.changes == 'true' }}
+        # Only run if changes were made and not in debug mode
+        if: ${{ steps.update.outputs.changes == 'true' && github.event.inputs.debug != 'true' }}
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Push changes
-        # Only push if there are changes to push
-        if: ${{ steps.update.outputs.changes == 'true' }}
+        # Only push if there are changes to push and not in debug mode
+        if: ${{ steps.update.outputs.changes == 'true' && github.event.inputs.debug != 'true' }}
         run: git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
