@@ -1,0 +1,51 @@
+name: Update Bun Type Definitions
+
+on:
+  schedule:
+    # Run daily at 2:00 UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  update-types:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Full git history needed for version operations
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+
+      - name: Run update script
+        id: update
+        run: |
+          chmod +x ./fetch-types.sh
+          ./fetch-types.sh
+        env:
+          # GitHub token for API requests (avoids rate limiting)
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to npm
+        # Only run if changes were made
+        if: ${{ steps.update.outputs.changes == 'true' }}
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Push changes
+        # Only push if there are changes to push
+        if: ${{ steps.update.outputs.changes == 'true' }}
+        run: git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 

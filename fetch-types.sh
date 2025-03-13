@@ -143,8 +143,12 @@ if [ "$NEW_HASH" != "$OLD_HASH" ]; then
         git add package.json
         git commit --allow-empty -m "bump version to ${LATEST_TAG_FOR_NPM}"
 
-        # publish the changes
-        npm publish
+        # Set output for GitHub Actions using the new approach
+        if [ -n "$GITHUB_OUTPUT" ]; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+        fi
+        
+        # Don't run npm publish here - GitHub Actions will handle it
     else
         echo "[DEBUG] would commit and push changes with message: update test.d.ts to ${LATEST_TAG} (bump to ${INCREMENTED_VERSION})"
         echo "[DEBUG] would update package.json version from ${CURRENT_VERSION} to ${LATEST_TAG_FOR_NPM}"
@@ -152,6 +156,11 @@ if [ "$NEW_HASH" != "$OLD_HASH" ]; then
     fi
 
     exit 0
+fi
+
+# No changes were made - set output for GitHub Actions
+if [ -n "$GITHUB_OUTPUT" ]; then
+    echo "changes=false" >> $GITHUB_OUTPUT
 fi
 
 echo "no changes to test.d.ts"
