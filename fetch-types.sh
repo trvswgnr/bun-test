@@ -73,7 +73,7 @@ if [[ -z "$LATEST_TAG" ]]; then
     if [ "$DEBUG" = "true" ]; then
         echo "[DEBUG] GitHub API response:"
         curl -s https://api.github.com/repos/oven-sh/bun/releases/latest
-        echo "[DEBUG] This could be due to GitHub API rate limiting. Consider using a GitHub token."
+        echo "[DEBUG] this could be due to GitHub API rate limiting. Consider using a GitHub token."
     fi
     exit 1
 fi
@@ -83,11 +83,11 @@ LATEST_TAG_FOR_NPM="${INCREMENTED_VERSION}+${LATEST_TAG}"
 
 # debug output
 if [ "$DEBUG" = "true" ]; then
-    echo "[DEBUG] Current version: ${CURRENT_VERSION}"
-    echo "[DEBUG] Incremented version: ${INCREMENTED_VERSION}"
-    echo "[DEBUG] Latest tag: ${LATEST_TAG}"
-    echo "[DEBUG] New version for NPM: ${LATEST_TAG_FOR_NPM}"
-    echo "[DEBUG] Fetching test.d.ts from GitHub for tag: ${LATEST_TAG}"
+    echo "[DEBUG] current version: ${CURRENT_VERSION}"
+    echo "[DEBUG] incremented version: ${INCREMENTED_VERSION}"
+    echo "[DEBUG] latest tag: ${LATEST_TAG}"
+    echo "[DEBUG] new version for NPM: ${LATEST_TAG_FOR_NPM}"
+    echo "[DEBUG] fetching test.d.ts from GitHub for tag: ${LATEST_TAG}"
 fi
 
 # use the GitHub API to get the file content from that specific tag
@@ -110,8 +110,8 @@ NEW_HASH=$(sha256sum test-new.d.ts | cut -d ' ' -f 1)
 
 # debug output for hashes
 if [ "$DEBUG" = "true" ]; then
-    echo "[DEBUG] Old hash: ${OLD_HASH}"
-    echo "[DEBUG] New hash: ${NEW_HASH}"
+    echo "[DEBUG] old hash: ${OLD_HASH}"
+    echo "[DEBUG] new hash: ${NEW_HASH}"
 fi
 
 # make sure the new file is not empty
@@ -151,5 +151,5 @@ if [ "$NEW_HASH" != "$OLD_HASH" ]; then
     exit 0
 fi
 
-echo "No changes to test.d.ts"
+echo "no changes to test.d.ts"
 rm test-new.d.ts
