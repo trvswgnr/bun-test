@@ -131,7 +131,6 @@ if [ "$NEW_HASH" != "$OLD_HASH" ]; then
         # commit the changes
         git add test.d.ts
         git commit --allow-empty -m "update test.d.ts to ${LATEST_TAG} (bump to ${INCREMENTED_VERSION})"
-        git push
 
         # update the version in package.json using sed (pure shell)
         # this works across different sed versions by creating a backup with .bak extension
@@ -139,7 +138,11 @@ if [ "$NEW_HASH" != "$OLD_HASH" ]; then
         rm package.json.bak  # remove the backup file
 
         echo "version bumped from ${CURRENT_VERSION} to ${LATEST_TAG_FOR_NPM}"
-        
+
+        # commit the changes
+        git add package.json
+        git commit --allow-empty -m "bump version to ${LATEST_TAG_FOR_NPM}"
+
         # publish the changes
         npm publish
     else
