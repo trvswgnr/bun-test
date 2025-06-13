@@ -1,6 +1,6 @@
 {
   "name": "@travvy/bun-test",
-  "version": "0.0.15+bun-v1.2.15",
+  "version": "0.0.16+bun-v1.2.16",
   "description": "re-export of bun:test",
   "files": [
     "*.d.ts"
